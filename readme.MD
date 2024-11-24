@@ -1,2 +1,1 @@
-SKIP TEST?
-test?
+skip test
