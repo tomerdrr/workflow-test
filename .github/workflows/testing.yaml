@@ -37,10 +37,11 @@ jobs:
       - name: Debug commit message
         run: |
           echo "Commit message: ${{ github.event.head_commit.message }}"
-          - name: commits
-          env:
-            COMMITS: ${{ join(github.event.commits.*.message, ' ') }}
-          run: echo "$COMMITS"
+
+      - name: commits
+        env:
+          COMMITS: ${{ join(github.event.commits.*.message, ' ') }}
+        run: echo "$COMMITS"
 
       - name: skip condition
         env:
