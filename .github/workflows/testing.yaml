@@ -22,3 +22,6 @@ jobs:
         env:
           COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
         run: echo "$COMMIT_MESSAGES"
+      - name: echo if not skip
+        if: ${{ github.event_name == 'push' && !contains(join(toJson(github.event.commits.*.message),' '), '#skip')}}
+        run: echo "Main and not skipped"
