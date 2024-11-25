@@ -32,20 +32,22 @@ jobs:
       - name: Notify Discord on success
         if: success()
         env:
+          DATE: "2024-11-25T10:35:02+02:00"
+          FORMATTED_DATE: $(date -d "$DATE" +"%A %H:%M")
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           DISCORD_USERNAME: GitHub Actions
           DISCORD_EMBEDS: |
             [{
               "title": "Build succeeded!",
               "color": 32768,
-              "description": "Commit ${{github.event.commits[0].id || 'Unknown commit'}} passed the tests.", 
+              "description": "to https://full-stack-open-pokedex-8pfy.onrender.com by ${{github.event.commits[0].committer.name || 'Unknown commit'}} passed the tests.", 
               "footer": {
-                "text": "Severity: Info."
+                "text": "Severity: Informational. $FORMATTED_DATE"
               }
             }]
         uses: Ilshidur/action-discord@master
         with:
-          args: ""
+          args: "A new version of Pokedex deployed"
 
       - name: Trigger an error
         run: nonexistent-command
@@ -53,17 +55,19 @@ jobs:
       - name: Notify Discord on failure
         if: failure()
         env:
+          DATE: "2024-11-25T10:35:02+02:00"
+          FORMATTED_DATE: $(date -d "$DATE" +"%A %H:%M")
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           DISCORD_USERNAME: GitHub Actions
           DISCORD_EMBEDS: |
             [{
               "title": "Build failed!",
               "color": 16711680,
-              "description": "Commit ${{github.event.commits[0].id || 'Unknown commit'}} failed tests.", 
+              "description": "Commit ${{github.event.commits[0].url || 'Unknown commit'}} by ${{github.event.commits[0].committer.name || 'Unknown commit'}} broke the build :(", 
               "footer": {
-                "text": "Severity: Error | Check logs for more information."
+                "text": "Severity: Error $FORMATTED_DATE"
               }
             }]
         uses: "Ilshidur/action-discord@master"
         with:
-          args: ""
+          args: "Buld Failed!"
