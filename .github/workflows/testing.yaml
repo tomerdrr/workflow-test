@@ -37,7 +37,42 @@ jobs:
           echo "Formatted date: $FORMATTED_DATE"
           echo "FORMATTED_DATE=$FORMATTED_DATE" >> $GITHUB_ENV  # Set formatted date as environment variable
 
-      - name: echo date
+      - name: Notify Discord on success
+        if: success()
         env:
-          MSG: "Severity: Informational ${{ env.FORMATTED_DATE }}"
-        run: echo ${{ env.MSG }}"
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_USERNAME: GitHub Actions
+          DISCORD_EMBEDS: |
+            [{
+              "title": "Build succeeded!",
+              "color": 32768,
+              "description": "to https://full-stack-open-pokedex-8pfy.onrender.com by ${{github.event.commits[0].committer.name || 'Unknown commit'}} passed the tests.", 
+              "footer": {
+                "text": "Severity: Informational ${{ env.FORMATTED_DATE }}"
+              }
+            }]
+        uses: Ilshidur/action-discord@master
+        with:
+          args: "A new version of Pokedex deployed"
+
+      - name: Trigger an error
+        run: nonexistent-command
+
+      - name: Notify Discord on failure
+        if: failure()
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_USERNAME: GitHub Actions
+          FORMATTED_DATE: ${{ env.FORMATTED_DATE }} # Use the formatted date from the previous step
+          DISCORD_EMBEDS: |
+            [{
+              "title": "Build failed!",
+              "color": 16711680,
+              "description": "Commit ${{github.event.commits[0].url || 'Unknown commit'}} by ${{github.event.commits[0].committer.name || 'Unknown commit'}} broke the build :(", 
+              "footer": {
+                "text": "Severity: Error ${{ env.FORMATTED_DATE }}"
+              }
+            }]
+        uses: "Ilshidur/action-discord@master"
+        with:
+          args: "Build Failed!"
