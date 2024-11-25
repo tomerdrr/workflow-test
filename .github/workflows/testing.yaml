@@ -30,8 +30,20 @@ jobs:
         run: echo "Main and not skipped"
 
       - name: Discord notification
+        if: success()
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
         with:
           args: "Test success"
+
+      - name: Trigger an error
+        run: nonexistent-command
+
+      - name: Discord notification
+        if: failure()
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: "Failure test success"
