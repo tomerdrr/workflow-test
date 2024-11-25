@@ -38,12 +38,14 @@ jobs:
             [{
               "title": "Build succeeded!",
               "color": 32768,
+              "description": "Commit ${{github.event.commits[0].id || 'Unknown commit'}} passed the tests.", 
               "footer": {
                 "text": "Severity: Info."
+              }
             }]
         uses: Ilshidur/action-discord@master
         with:
-          args: "Commit ${{github.event.commits[0].id || 'Unknown commit'}} passed the tests."
+          args: ""
 
       - name: Trigger an error
         run: nonexistent-command
@@ -57,10 +59,11 @@ jobs:
             [{
               "title": "Build failed!",
               "color": 16711680,
+              "description": "Commit ${{github.event.commits[0].id || 'Unknown commit'}} failed tests.", 
               "footer": {
                 "text": "Severity: Error | Check logs for more information."
               }
             }]
         uses: "Ilshidur/action-discord@master"
         with:
-          args: "Commit ${{github.event.commits[0].id || 'Unknown commit'}} failed tests."
+          args: ""
