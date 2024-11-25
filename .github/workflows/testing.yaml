@@ -44,6 +44,7 @@ jobs:
         if: failure()
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_USERNAME: "Github"
         uses: Ilshidur/action-discord@master
         with:
-          args: "Failure test success"
+          args: "Commit ${{github.event.commits.id}} caused the build to fail. Check the logs for more information."
