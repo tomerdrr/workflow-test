@@ -47,4 +47,4 @@ jobs:
           DISCORD_USERNAME: "Github"
         uses: Ilshidur/action-discord@master
         with:
-          args: "Commit ${{github.event.commits.id}} caused the build to fail. Check the logs for more information."
+          args: "Commit ${{toJson(github.event.commits.id)}} caused the build to fail. Check the logs for more information."
