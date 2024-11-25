@@ -29,22 +29,34 @@ jobs:
         if: ${{ github.event_name == 'push' && !contains(join(toJson(github.event.commits.*.message),' '), '#skip')}}
         run: echo "Main and not skipped"
 
-      - name: Discord notification
-        if: success()
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        uses: Ilshidur/action-discord@master
-        with:
-          args: "Test success"
+      - name: echo github
+        run: echo ${{toJson(github.event)}}
 
-      - name: Trigger an error
-        run: nonexistent-command
+      # - name: Discord notification
+      #   if: success()
+      #   env:
+      #     DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      #   uses: Ilshidur/action-discord@master
+      #   with:
+      #     args: "Test success"
 
-      - name: Discord notification
-        if: failure()
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          DISCORD_USERNAME: "Github"
-        uses: Ilshidur/action-discord@master
-        with:
-          args: "Commit ${{toJson(github.event.commits.id)}} caused the build to fail. Check the logs for more information."
+      # - name: Trigger an error
+      #   run: nonexistent-command
+
+      # - name: Notify Discord on failure
+      #   if: failure()
+      #   env:
+      #     DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      #     DISCORD_USERNAME: GitHub Actions
+      #     DISCORD_EMBEDS: |
+      #       [{
+      #         "title": "Build failed!",
+      #         "color": FF0000,
+      #         "description": "Commit [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) caused the build to fail.",
+      #         "footer": {
+      #           "text": "Severity: Error | Check logs for more information."
+      #         }
+      #       }]
+      #   uses: "Ilshidur/action-discord@master"
+      #   with:
+      #     args: "Commit id failed tests."
