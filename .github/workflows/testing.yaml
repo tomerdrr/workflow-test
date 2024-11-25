@@ -30,33 +30,4 @@ jobs:
         run: echo "Main and not skipped"
 
       - name: echo github
-        run: echo ${{toJson(github.event)}}
-
-      # - name: Discord notification
-      #   if: success()
-      #   env:
-      #     DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-      #   uses: Ilshidur/action-discord@master
-      #   with:
-      #     args: "Test success"
-
-      # - name: Trigger an error
-      #   run: nonexistent-command
-
-      # - name: Notify Discord on failure
-      #   if: failure()
-      #   env:
-      #     DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-      #     DISCORD_USERNAME: GitHub Actions
-      #     DISCORD_EMBEDS: |
-      #       [{
-      #         "title": "Build failed!",
-      #         "color": FF0000,
-      #         "description": "Commit [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) caused the build to fail.",
-      #         "footer": {
-      #           "text": "Severity: Error | Check logs for more information."
-      #         }
-      #       }]
-      #   uses: "Ilshidur/action-discord@master"
-      #   with:
-      #     args: "Commit id failed tests."
+        run: echo ${{toJson(github.event.commits[0].id)}}
